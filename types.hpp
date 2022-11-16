@@ -203,7 +203,9 @@ public:
 				return knownFnType;
 			}
 		}
-		return new FnType(inTypes, outType);
+		FnType * t = new FnType(inTypes, outType);
+		knownFnTypes.push_back(t);
+		return t;
 	}
 
 	bool sameSigAs(const TypeList * inTypes, const DataType * outType){
