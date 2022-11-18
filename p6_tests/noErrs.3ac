@@ -1,0 +1,10 @@
+[BEGIN GLOBALS]
+[END GLOBALS]
+[BEGIN func LOCALS]
+b (local var of 8 bytes)
+a (local var of 8 bytes)
+[END func LOCALS]
+fun_func:   enter func
+            [a] := 4
+lbl_0:      leave func
+

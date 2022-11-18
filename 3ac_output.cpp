@@ -10,8 +10,32 @@ IRProgram * ProgramNode::to3AC(TypeAnalysis * ta){
 	return prog;
 }
 
+static void formalsTo3AC(Procedure * proc, 
+  std::list<FormalDeclNode *> * myFormals){
+	for (auto formal : *myFormals){
+		formal->to3AC(proc);
+	}
+	unsigned int argIdx = 1;
+	for (auto formal : *myFormals){
+		SemSymbol * sym = formal->ID()->getSymbol();
+		SymOpd * opd = proc->getSymOpd(sym);
+		Quad * inQuad = new GetArgQuad(argIdx, opd);
+		proc->addQuad(inQuad);
+		argIdx += 1;
+	}
+}
+
 void FnDeclNode::to3AC(IRProgram * prog){
-	TODO(Implement me)
+	SemSymbol * mySym = this->ID()->getSymbol();
+	Procedure * proc = prog->makeProc(mySym->getName());
+
+	//Generate the getin quads
+	formalsTo3AC(proc, myFormals);
+
+	for (auto stmt : *myBody){
+		stmt->to3AC(proc);
+	}
+
 }
 
 void FnDeclNode::to3AC(Procedure * proc){
@@ -31,7 +55,8 @@ void FormalDeclNode::to3AC(IRProgram * prog){
 }
 
 void FormalDeclNode::to3AC(Procedure * proc){
-	TODO(Implement me)
+	SemSymbol * sym = ID()->getSymbol();
+	proc->gatherFormal(sym);
 }
 
 Opd * MayhemNode::flatten(Procedure * proc){
@@ -65,28 +90,43 @@ Opd * AssignExpNode::flatten(Procedure * proc){
 		throw InternalError("null Dst");
 	}
 	
-	AssignQuad * quad = new AssignQuad(op1, op2);
+	AssignQuad * quad = new AssignQuad(op2, op1);
 	quad->setComment("Assign");
 	proc->addQuad(quad);
 	return op1;
 }
 
-Opd * CallExpNode::flatten(Procedure * proc){
-	TODO(Implement me)
-	// myArgs->to3AC(proc);
-	// Quad * callQuad = new CallQuad(myID->getSymbol());
-	// proc->addQuad(callQuad);
+static void argsTo3AC(Procedure * proc, std::list<ExpNode *> * args){
+	std::list<std::pair<Opd *, const DataType *>> argOpds;
+	for (auto argNode : *args){
+		Opd * argOpd = argNode->flatten(proc);
+		const DataType * argType = proc->getProg()->nodeType(argNode);
+		argOpds.push_back(std::make_pair(argOpd, argType));
+	}
+	size_t argIdx = 1;
+	for (auto argOpd : argOpds){
+		Quad * argQuad = new SetArgQuad(argIdx, argOpd.first);
+		proc->addQuad(argQuad);
+		argIdx++;
+	}
+}
 
-	// SemSymbol * idSym = myID->getSymbol();
-	// const FnType * calleeType = idSym->getDataType()->asFn();
-	// if (calleeType->getReturnType()->isVoid()){
-	// 	return nullptr;
-	// } else {
-	// 	Opd * retVal = proc->makeTmp(8);
-	// 	Quad * getRet = new GetRetQuad(1, retVal);
-	// 	proc->addQuad(getRet);
-	// 	return retVal;
-	// }
+Opd * CallExpNode::flatten(Procedure * proc){
+	argsTo3AC(proc, myArgs);
+	Quad * callQuad = new CallQuad(myID->getSymbol());
+	proc->addQuad(callQuad);
+
+	SemSymbol * idSym = myID->getSymbol();
+	const FnType * calleeType = idSym->getDataType()->asFn();
+	const DataType * retType = calleeType->getReturnType();
+	if (retType->isVoid()){
+		return nullptr;
+	} else {
+		Opd * retVal = proc->makeTmp(Opd::width(retType));
+		Quad * getRet = new GetRetQuad(retVal);
+		proc->addQuad(getRet);
+		return retVal;
+	}
 }
 
 Opd * NegNode::flatten(Procedure * proc){
@@ -378,21 +418,11 @@ void VarDeclNode::to3AC(IRProgram * prog){
 //We only get to this node if we are in a stmt
 // context (DeclNodes protect descent)
 Opd * IDNode::flatten(Procedure * proc){
-	TODO(Implement me)
-	// Opd * baseOpd = myBase->flatten(proc);
-	// const DataType * baseType = proc->getProg()->nodeType(myBase);
-	// const RecordType * recordType = baseType->asRecord();
-	// assert(recordType != nullptr);
-	
-	// //Opd * offOpd = myIdx->flatten(proc);
-	// size_t offsetVal = recordType->getOffset(myIdx->getName());
-	// size_t width = 8;
-	// LitOpd * offOpd = new LitOpd(to_string(offsetVal), 8);
-	
-	// AddrOpd * idxLoc = proc->makeAddrOpd(width);
-	// IndexQuad * idx = new IndexQuad(idxLoc, baseOpd, offOpd);
-	// proc->addQuad(idx);
-	// return idxLoc;
-
+SemSymbol * sym = this->getSymbol();
+	Opd * res = proc->getSymOpd(sym);
+	if (!res){
+		throw new InternalError("null id sym");;
+	}
+	return res;
 }
 }
