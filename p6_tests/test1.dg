@@ -1,0 +1,43 @@
+//Comment Ex
+int c;
+int f;
+int g;
+bool q;
+bool r;
+bool s;
+int func(int a, int b, int d, int e, int f, int g, int h, int i){
+	a = 15;
+	b = 10;
+	return a-b;
+}
+
+void main(){
+	q = false;
+	r = true;
+	s = false;
+	int a;
+	int b;
+	int d;
+	int e;
+	int h;
+	int i;
+	func(a, b, d, e, f, g, h, i);
+	d = c;
+	c = f - g * d;
+	if(q or r and s)
+	{
+	return;
+	}
+	if(d <= c)
+	{
+		return;
+	}
+	if(!r)
+	{
+		c = -c;
+	}
+	while(!r)
+	{
+		c++;
+	}
+} 

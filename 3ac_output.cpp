@@ -36,6 +36,7 @@ void FnDeclNode::to3AC(IRProgram * prog){
 		stmt->to3AC(proc);
 	}
 
+
 }
 
 void FnDeclNode::to3AC(Procedure * proc){
@@ -418,7 +419,7 @@ void VarDeclNode::to3AC(IRProgram * prog){
 //We only get to this node if we are in a stmt
 // context (DeclNodes protect descent)
 Opd * IDNode::flatten(Procedure * proc){
-SemSymbol * sym = this->getSymbol();
+	SemSymbol * sym = this->getSymbol();
 	Opd * res = proc->getSymOpd(sym);
 	if (!res){
 		throw new InternalError("null id sym");;

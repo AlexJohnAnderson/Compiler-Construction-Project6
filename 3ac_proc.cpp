@@ -34,7 +34,7 @@ std::string Procedure::toString(bool verbose){
 	res += "[BEGIN " + this->getName() + " LOCALS]\n";
 	for (const auto formal : this->formals){
 		res += formal->getName() + " (formal arg of "
-			+ std::to_string(formal->getWidth()) + ")\n";
+			+ std::to_string(formal->getWidth()) +
 			+ " bytes)\n";
 	}
 
@@ -104,7 +104,7 @@ SymOpd * Procedure::getSymOpd(SemSymbol * sym){
 }
 
 AuxOpd * Procedure::makeTmp(size_t width){
-	std::string name = "varTmp";
+	std::string name = "tmp";
 	name += std::to_string(maxTmp++);
 	AuxOpd * res = new AuxOpd(name, width);
 	temps.push_back(res);

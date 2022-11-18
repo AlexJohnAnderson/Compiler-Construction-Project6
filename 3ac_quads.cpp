@@ -131,7 +131,7 @@ std::string UnaryOpQuad::repr(){
 		opString = "NEG64 ";
 		break;
 	case NOT8:
-		opString = "NOT8 ";
+		opString = "NOT64 ";
 	}
 	return dst->valString() + " := "
 		+ opString

@@ -1,0 +1,91 @@
+[BEGIN GLOBALS]
+c
+f
+g
+q
+r
+s
+func
+main
+[END GLOBALS]
+[BEGIN func LOCALS]
+a (formal arg of 8 bytes)
+b (formal arg of 8 bytes)
+d (formal arg of 8 bytes)
+e (formal arg of 8 bytes)
+f (formal arg of 8 bytes)
+g (formal arg of 8 bytes)
+h (formal arg of 8 bytes)
+i (formal arg of 8 bytes)
+tmp0 (tmp var of 8 bytes)
+[END func LOCALS]
+fun_func:   enter func
+            getarg 1 [a]
+            getarg 2 [b]
+            getarg 3 [d]
+            getarg 4 [e]
+            getarg 5 [f]
+            getarg 6 [g]
+            getarg 7 [h]
+            getarg 8 [i]
+            [a] := 15
+            [b] := 10
+            [tmp0] := [a] SUB64 [b]
+            setret [tmp0]
+            goto lbl_0
+lbl_0:      leave func
+[BEGIN main LOCALS]
+a (local var of 8 bytes)
+b (local var of 8 bytes)
+d (local var of 8 bytes)
+e (local var of 8 bytes)
+h (local var of 8 bytes)
+i (local var of 8 bytes)
+tmp0 (tmp var of 8 bytes)
+tmp1 (tmp var of 8 bytes)
+tmp2 (tmp var of 8 bytes)
+tmp3 (tmp var of 8 bytes)
+tmp4 (tmp var of 8 bytes)
+tmp5 (tmp var of 8 bytes)
+tmp6 (tmp var of 8 bytes)
+tmp7 (tmp var of 8 bytes)
+tmp8 (tmp var of 8 bytes)
+[END main LOCALS]
+main:       enter main
+            [q] := 0
+            [r] := 1
+            [s] := 0
+            setarg 1 [a]
+            setarg 2 [b]
+            setarg 3 [d]
+            setarg 4 [e]
+            setarg 5 [f]
+            setarg 6 [g]
+            setarg 7 [h]
+            setarg 8 [i]
+            call func
+            [d] := [c]
+            [tmp1] := [g] MULT64 [d]
+            [tmp2] := [f] SUB64 [tmp1]
+            [c] := [tmp2]
+            [tmp3] := [r] AND64 [s]
+            [tmp4] := [q] OR64 [tmp3]
+            IFZ [tmp4] GOTO lbl_2
+            goto lbl_1
+lbl_2:      nop
+            [tmp5] := [d] LTE64 [c]
+            IFZ [tmp5] GOTO lbl_3
+            goto lbl_1
+lbl_3:      nop
+            [tmp6] := NOT64 [r]
+            IFZ [tmp6] GOTO lbl_4
+            [tmp7] := NEG64 [c]
+            [c] := [tmp7]
+lbl_4:      nop
+lbl_5:      nop
+            [tmp8] := NOT64 [r]
+            IFZ [tmp8] GOTO lbl_6
+            [c] := [c] ADD64 1
+            goto lbl_5
+lbl_6:      nop
+lbl_1:      leave main

@@ -1,5 +1,4 @@
 [BEGIN GLOBALS]
-func
 [END GLOBALS]
 [BEGIN func LOCALS]
 b (local var of 8 bytes)
