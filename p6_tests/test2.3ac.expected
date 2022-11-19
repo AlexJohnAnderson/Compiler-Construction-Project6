@@ -1,0 +1,108 @@
+[BEGIN GLOBALS]
+a
+b
+c
+d
+e
+f
+g
+h
+i
+func
+s
+v
+main
+str_1 "hello!!"
+str_0 "hi"
+[END GLOBALS]
+[BEGIN func LOCALS]
+a (formal arg of 8 bytes)
+k (formal arg of 8 bytes)
+[END func LOCALS]
+fun_func:   enter func
+            getarg 1 [a]
+            getarg 2 [k]
+            [a] := 5
+            [k] := 1
+            IFZ [k] GOTO lbl_1
+            [a] := [a] ADD64 1
+            goto lbl_2
+lbl_1:      nop
+            [a] := [a] SUB64 1
+lbl_2:      nop
+            setret [a]
+            goto lbl_0
+lbl_0:      leave func
+[BEGIN s LOCALS]
+[END s LOCALS]
+fun_s:      enter s
+lbl_3:      leave s
+[BEGIN v LOCALS]
+a (formal arg of 8 bytes)
+b (formal arg of 8 bytes)
+c (formal arg of 8 bytes)
+d (formal arg of 8 bytes)
+e (formal arg of 8 bytes)
+f (formal arg of 8 bytes)
+g (formal arg of 8 bytes)
+h (formal arg of 8 bytes)
+i (formal arg of 8 bytes)
+[END v LOCALS]
+fun_v:      enter v
+            getarg 1 [a]
+            getarg 2 [b]
+            getarg 3 [c]
+            getarg 4 [d]
+            getarg 5 [e]
+            getarg 6 [f]
+            getarg 7 [g]
+            getarg 8 [h]
+            getarg 9 [i]
+            setret 99
+            goto lbl_4
+lbl_4:      leave v
+[BEGIN main LOCALS]
+k (local var of 8 bytes)
+tmp0 (tmp var of 8 bytes)
+tmp1 (tmp var of 8 bytes)
+tmp2 (tmp var of 8 bytes)
+tmp3 (tmp var of 8 bytes)
+tmp4 (tmp var of 8 bytes)
+tmp5 (tmp var of 8 bytes)
+[END main LOCALS]
+main:       enter main
+            [f] := 0
+            [b] := 5
+            [c] := 9
+lbl_6:      nop
+            [tmp0] := NOT64 [f]
+            IFZ [tmp0] GOTO lbl_7
+            [b] := [b] ADD64 1
+            REPORT str_0
+            goto lbl_6
+lbl_7:      nop
+            [tmp1] := NEG64 [c]
+            [c] := [tmp1]
+lbl_8:      nop
+            [tmp2] := [b] LTE64 [c]
+            IFZ [tmp2] GOTO lbl_9
+            [tmp3] := [a] MULT64 [b]
+            [k] := [tmp3]
+            goto lbl_8
+lbl_9:      nop
+            [tmp4] := [f] OR64 [g]
+            [e] := [tmp4]
+            [tmp5] := [f] AND64 [g]
+            [e] := [tmp5]
+            REPORT [b]
+            REPORT [b]
+            REPORT [b]
+            REPORT [b]
+            REPORT [b]
+            REPORT [b]
+            REPORT [b]
+            REPORT [b]
+            REPORT [b]
+            REPORT [b]
+            REPORT str_1
+lbl_5:      leave main

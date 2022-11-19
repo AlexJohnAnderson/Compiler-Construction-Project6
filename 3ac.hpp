@@ -38,6 +38,10 @@ public:
 		if (const BasicType * basic = type->asBasic()){
 			return 8;
 		}
+		if(const FnType * fn = type->asFn())
+		{
+			return 8;
+		}
 		assert(false);
 	}
 private:
@@ -100,7 +104,7 @@ public:
 	AddrOpd(std::string nameIn, size_t width)
 	: Opd(width), name(nameIn) { }
 	virtual std::string valString() override{
-		return "[" + getName() + "]";
+		return getName();
 	}
 	virtual std::string locString() override{
 		return getName();
@@ -286,6 +290,15 @@ private:
 class GetRetQuad : public Quad{
 public:
 	GetRetQuad(Opd * opdIn);
+	std::string repr() override;
+	Opd * getDst(){ return opd; }
+private:
+	Opd * opd;
+};
+
+class MayhemQuad : public Quad{
+public:
+	MayhemQuad(Opd * opdIn);
 	std::string repr() override;
 	Opd * getDst(){ return opd; }
 private:

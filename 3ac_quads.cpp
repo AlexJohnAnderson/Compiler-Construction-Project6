@@ -229,4 +229,15 @@ std::string LocQuad::repr(){
 	return res;
 }
 
+MayhemQuad::MayhemQuad(Opd * opdIn)
+: Quad(), opd(opdIn) { }
+
+std::string MayhemQuad::repr(){
+	std::string res = "";
+	res += "MAYHEM " + opd->valString();
+	return res;
+}
+
+
+
 }

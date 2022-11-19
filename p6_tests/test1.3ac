@@ -5,6 +5,8 @@ g
 q
 r
 s
+func
+main
 [END GLOBALS]
 [BEGIN func LOCALS]
 a (formal arg of 8 bytes)

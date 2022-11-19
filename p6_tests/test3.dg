@@ -1,0 +1,11 @@
+int a() { return 1; }
+int b() { return 2; }
+int main(){
+fn ()-> int ptr;
+if(mayhem > 2) {
+    ptr = a;
+    } else {
+        ptr = b;
+    }
+    ptr();
+}

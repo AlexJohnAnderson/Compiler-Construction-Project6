@@ -1,0 +1,11 @@
+[BEGIN GLOBALS]
+main
+[END GLOBALS]
+[BEGIN main LOCALS]
+[END main LOCALS]
+main:       enter main
+lbl_1:      nop
+            goto lbl_1
+lbl_2:      nop
+lbl_0:      leave main
+

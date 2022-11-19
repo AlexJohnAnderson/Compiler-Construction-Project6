@@ -28,15 +28,13 @@ static void formalsTo3AC(Procedure * proc,
 void FnDeclNode::to3AC(IRProgram * prog){
 	SemSymbol * mySym = this->ID()->getSymbol();
 	Procedure * proc = prog->makeProc(mySym->getName());
-
 	//Generate the getin quads
+	prog->gatherGlobal(mySym);
 	formalsTo3AC(proc, myFormals);
 
 	for (auto stmt : *myBody){
 		stmt->to3AC(proc);
 	}
-
-
 }
 
 void FnDeclNode::to3AC(Procedure * proc){
@@ -44,6 +42,7 @@ void FnDeclNode::to3AC(Procedure * proc){
 	// the function only exists because of
 	// inheritance needs (A function declaration
 	// never occurs within another function)
+
 	throw new InternalError("FnDecl at a local scope");
 }
 
@@ -61,7 +60,10 @@ void FormalDeclNode::to3AC(Procedure * proc){
 }
 
 Opd * MayhemNode::flatten(Procedure * proc){
-	TODO(Implement me)
+	Opd * retVal = proc->makeTmp(8);
+	Quad * may = new MayhemQuad(retVal);
+	proc->addQuad(may);
+	return retVal;
 }
 
 Opd * IntLitNode::flatten(Procedure * proc){
@@ -308,11 +310,15 @@ void PostDecStmtNode::to3AC(Procedure * proc){
 }
 
 void OutputStmtNode::to3AC(Procedure * proc){
-	TODO(Implement me)
+	Opd * child = this->mySrc->flatten(proc);
+	proc->addQuad(new ReportQuad(child,
+	proc->getProg()->nodeType(mySrc)));
 }
 
 void InputStmtNode::to3AC(Procedure * proc){
-	TODO(Implement me)
+	Opd * child = this->myDst->flatten(proc);
+	proc->addQuad(new ReceiveQuad(child,
+	proc->getProg()->nodeType(myDst)));
 }
 
 void IfStmtNode::to3AC(Procedure * proc){
@@ -382,7 +388,27 @@ void WhileStmtNode::to3AC(Procedure * proc){
 }
 
 void ForStmtNode::to3AC(Procedure * proc){
-	TODO(Implement me)
+	Quad * headNop = new NopQuad();
+	Label * headLabel = proc->makeLabel();
+	headNop->addLabel(headLabel);
+
+	Label * afterLabel = proc->makeLabel();
+	Quad * afterQuad = new NopQuad();
+	afterQuad->addLabel(afterLabel);
+
+	proc->addQuad(headNop);
+	
+	//Opd * cond = myCond->flatten(proc);
+	//Quad * jmpFalse = new IfzQuad(cond, afterLabel);
+	//proc->addQuad(jmpFalse);
+
+	//for (auto stmt : *myBody){
+	//	stmt->to3AC(proc);
+	//}
+
+	Quad * loopBack = new GotoQuad(headLabel);
+	proc->addQuad(loopBack);
+	proc->addQuad(afterQuad);
 }
 
 void CallStmtNode::to3AC(Procedure * proc){
