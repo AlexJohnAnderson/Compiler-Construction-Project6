@@ -388,6 +388,7 @@ void WhileStmtNode::to3AC(Procedure * proc){
 }
 
 void ForStmtNode::to3AC(Procedure * proc){
+	myInit->to3AC(proc);
 	Quad * headNop = new NopQuad();
 	Label * headLabel = proc->makeLabel();
 	headNop->addLabel(headLabel);
@@ -397,15 +398,13 @@ void ForStmtNode::to3AC(Procedure * proc){
 	afterQuad->addLabel(afterLabel);
 
 	proc->addQuad(headNop);
-	
-	//Opd * cond = myCond->flatten(proc);
-	//Quad * jmpFalse = new IfzQuad(cond, afterLabel);
-	//proc->addQuad(jmpFalse);
-
-	//for (auto stmt : *myBody){
-	//	stmt->to3AC(proc);
-	//}
-
+	Opd * cond = myCond->flatten(proc);
+	Quad * jmpFalse = new IfzQuad(cond, afterLabel);
+	proc->addQuad(jmpFalse);
+	for (auto stmt : *myBody){
+		stmt->to3AC(proc);
+	}
+	myItr->to3AC(proc);
 	Quad * loopBack = new GotoQuad(headLabel);
 	proc->addQuad(loopBack);
 	proc->addQuad(afterQuad);

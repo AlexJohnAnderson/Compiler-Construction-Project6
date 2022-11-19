@@ -2,9 +2,15 @@
 main
 [END GLOBALS]
 [BEGIN main LOCALS]
+i (local var of 8 bytes)
+tmp0 (tmp var of 8 bytes)
 [END main LOCALS]
 main:       enter main
 lbl_1:      nop
+            [tmp0] := [i] LT64 3
+            IFZ [tmp0] GOTO lbl_2
+            REPORT [i]
+            [i] := [i] ADD64 1
             goto lbl_1
 lbl_2:      nop
 lbl_0:      leave main
